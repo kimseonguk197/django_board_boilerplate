@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form action="http://localhost:8000/test_post_handle" method="POST">
+            {% csrf_token %}
+            이름 : <input type="text" name="my_name"><br>
+            email : <input type="text" name="my_email"><br>
+            password : <input type="text" name="my_password"><br>
+            <input type="submit" value="회원가입">
+        </form>
+    </body>
+
+</html>

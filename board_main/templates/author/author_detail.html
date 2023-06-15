@@ -1,0 +1,22 @@
+{% extends 'home.html' %}
+
+{% block content%}
+<div class="row">
+    <div>
+        <h1>회원상세조회</h1>
+        <p><b>이름</b> : {{author.name}}</p>
+        <p><b>email</b> : {{author.email}}</p>
+        <p><b>password</b> : {{author.password}}</p>
+        <p><b>작성글수</b> : {{author.posts.count}}</p>
+        <hr>
+        <div>
+            <span><b>가입일</b> : {{author.created_at}}</span>&nbsp;&nbsp;&nbsp;
+            <span><b>회원정보수정일</b> : {{author.updated_at}}</span>
+        </div>
+    </div>
+    <div>
+        <a href="/author/{{author.id}}/update" class="btn btn-primary">회원수정</a>
+        <a href="/authors" class="btn btn-secondary">회원목록</a>
+    </div>
+</div>
+{% endblock %}

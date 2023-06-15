@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>환영합니다.</title>
+    </head>
+    <body>
+        {% for data in datas %}
+        <h1>이름은 {{data.name}}</h1>
+        <h1>email은 {{data.email}}</h1>
+        <h1>password은 {{data.password}}</h1>
+        {% endfor %}
+        
+    </body>
+</html>

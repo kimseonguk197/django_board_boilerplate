@@ -1,0 +1,30 @@
+{% extends 'home.html' %}
+
+{% block content%}
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="page-title">회원목록</h1>
+    <a href="/author/new" class="btn btn-primary">회원가입</a>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>이름</th>
+            <th>email</th>
+            <th>가입일</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for author in authors %}
+        <tr>
+            <td><a href="/author/{{author.id}}">{{author.name}}</a></td>
+            <td>{{author.email}}</td>
+            <td>{{author.created_at}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+{% endblock %}

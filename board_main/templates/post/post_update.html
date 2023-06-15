@@ -1,0 +1,16 @@
+{% extends 'home.html' %}
+
+{% block content%}
+<h1>글수정</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+    제목<input type="text" class = "form-control" name="my_title" value="{{post.title}}">
+    </div>
+    <div class="form-group">
+    내용<textarea name="my_contents" class = "form-control"  rows="10" value="">{{post.contents}}</textarea>
+    </div>
+    <input type="submit" value="수정하기" class="btn btn-primary">
+    <a href="/post/{{post.id}}" class="btn btn-secondary">수정취소</a>
+</form>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'home.html' %}
+
+{% block content%}
+
+<div class="d-flex justify-content-between align-items-center">
+    <h1>글목록</h1>
+    <a href="/post/new" class="btn btn-primary">글작성</a>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>목차</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="/post/{{post.id}}">{{post.title}}</a></td>
+            <td>{{post.author.name}}</td>
+            <td>{{post.created_at}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+{% endblock %}

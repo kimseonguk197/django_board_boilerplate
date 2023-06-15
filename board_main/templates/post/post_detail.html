@@ -1,0 +1,21 @@
+{% extends 'home.html' %}
+
+{% block content%}
+<div class="row">
+    <div>
+        <h1>게시글 상세조회</h1>
+        <p>제목 : {{post.title}}</p>
+        <p>내용 : {{post.contents}}</p>
+        <hr>
+        <div>
+            <span>작성자 : {{post.author.name}}</span>&nbsp;&nbsp;
+            <span>작성일 : {{post.created_at}}</span>&nbsp;&nbsp;
+            <span>수정일 : {{post.updated_at}}</span>
+        </div>
+    </div>
+    <div>
+        <a href="/post/{{post.id}}/update" class="btn btn-primary">글수정</a>
+        <a href="/posts" class="btn btn-secondary">글목록</a>
+    </div>
+</div>
+{% endblock %}

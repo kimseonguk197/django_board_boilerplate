@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form action="http://localhost:8000/test_update" method="POST">
+            {% csrf_token %}
+            id : <input type="text" name="my_id"><br>
+            이름 : <input type="text" name="my_name"><br>
+            email : <input type="text" name="my_email"><br>
+            password : <input type="text" name="my_password"><br>
+            <input type="submit" value="수정하기">
+        </form>
+    </body>
+
+</html>
