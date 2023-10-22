@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: django-board-depl
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: django-board 
+  template: 
+    metadata:
+      labels:
+        app: django-board
+    spec:
+      initContainers:
+      - name: init-migrate
+        image: 123456789xxx.dkr.ecr.ap-northeast-2.amazonaws.com/django-board:latest
+        command:
+        - sh
+        - -c
+        - python manage.py migrate
+      containers:
+      - name: django-board
+        image: 123456789xxx.dkr.ecr.ap-northeast-2.amazonaws.com/django-board:latest
+        imagePullPolicy: Always
+        command:
+        - sh
+        - -c
+        - "python manage.py runserver 0.0.0.0:8000"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-board-srv
+spec:
+  type: ClusterIP 
+  selector: #how to find set of pods to access
+    app: django-board
+  ports:
+    - name: django-board
+      protocol: TCP
+      port: 8000 
+      targetPort: 8000

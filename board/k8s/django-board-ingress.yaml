@@ -1,0 +1,88 @@
+# 순서1. ingress-controller deployment 생성
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/aws/deploy.yaml
+
+# https 라우팅을 위한 절차
+# 순서2.cert-manager 생성
+# 2-1. 네임스페이스 생성
+# kubectl create namespace cert-manager
+# 2-2. cert-manager를 설치하기 위해 Jetstack Helm 리포지토리를 추가
+# helm repo add jetstack https://charts.jetstack.io
+# 2-3. Helm 리포지토리 업데이트
+# helm repo update
+# 2-4. cert-manager 차트 설치
+# helm install \
+#   cert-manager jetstack/cert-manager \
+#   --namespace cert-manager \
+#   --version v1.5.0 \
+#   --create-namespace \
+#   --set installCRDs=true
+
+
+# 순서3.ClusterIssuer 생성
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-prod
+# spec:
+#   acme:
+#     # ACME 서버의 URL입니다. 이 값은 Let's Encrypt의 실제 환경을 가리킵니다.
+#     server: https://acme-v02.api.letsencrypt.org/directory
+#     # 이메일 주소는 Let's Encrypt에서 인증서의 만료 알림을 보내는 데 사용됩니다.
+#     email: ksg3941234@gmail.com
+#     # 비공개키는 Let's Encrypt 계정에 사용됩니다.
+#     privateKeySecretRef:
+#       name: letsencrypt-prod
+#     # ACME 도메인 확인을 위해 사용되는 챌린지 방법을 지정합니다.
+#     solvers:
+#     - http01:
+#         ingress:
+#           class: nginx
+
+# ---
+
+
+# 순서4. ClusterIssuer를 사용하여 Certificate 리소스를 생성
+# Certificate생성시 letsencrypt-prod 인증서를 ClusterIssuer가 발급
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: django-board-seonguk-com-tls
+  namespace: default
+spec:
+  secretName: django-board-seonguk-com-tls
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: django-board.seonguk.com
+  dnsNames:
+  - django-board.seonguk.com
+
+---
+
+# 순서5.ingress배포
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-board-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - "django-board.seonguk.com"
+    secretName: django-board.seonguk.com-tls
+  rules:
+  - host: "django-board.seonguk.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: django-board-srv
+            port:
+              number: 8000
